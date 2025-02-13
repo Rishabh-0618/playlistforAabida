@@ -1,0 +1,103 @@
+<!-- Updated index.html with Audio Support and Visible Controls -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Playlist</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-side">
+        <h1>Playlist</h1>
+        <p>Songs that remind me of you</p>
+      </div>
+      <div class="right-side">
+        <input type="radio" name="slider" id="item-1" checked />
+        <input type="radio" name="slider" id="item-2" />
+        <input type="radio" name="slider" id="item-3" />
+        <input type="radio" name="slider" id="item-4" />
+        <input type="radio" name="slider" id="item-5" />
+        
+        <div class="cards">
+          <label class="card" for="item-1" id="song-1">
+            <img src="images/maula.jpg" alt="Maula Mere Maula" />
+          </label>
+          <label class="card" for="item-2" id="song-2">
+            <img src="images/laila.jpg" alt="O Meri Laila" />
+          </label>
+          <label class="card" for="item-3" id="song-3">
+            <img src="images/tune.jpg" alt="Ye Tune Kya Kiya" />
+          </label>
+          <label class="card" for="item-4" id="song-4">
+            <img src="images/jeena.jpg" alt="Jeena Jeena" />
+          </label>
+          <label class="card" for="item-5" id="song-5">
+            <img src="images/tere.jpg" alt="Tere Naina" />
+          </label>
+        </div>
+        
+        <div class="player">
+          <audio id="audio-player" controls>
+            <source id="audio-source" src="Maula Mere Maula - Anwar 320 Kbps.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+          <div class="controls">
+            <button id="prev">◁</button>
+            <button id="toggle">▶</button>
+            <button id="next">▷</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const songs = [
+        "Maula Mere Maula - Anwar 320 Kbps.mp3",
+        "320kbps_Laila Majnu 2018 - O Meri Laila.mp3",
+        "Ye Tune Kya Kiya - Once Upon A Time In Mumbaai Dobara 320 Kbps.mp3",
+        "Jeena Jeena - Badlapur 320 Kbps.mp3",
+        "old_MNIK-Tere Naina.mp3"
+      ];
+      let currentSongIndex = 0;
+      let audio = document.getElementById("audio-player");
+      let source = document.getElementById("audio-source");
+      let isPlaying = false;
+      
+      function changeSong(index) {
+        source.src = songs[index];
+        audio.load();
+        audio.play().catch(error => console.log("Playback error: ", error));
+        isPlaying = true;
+        updateSlider(index);
+        document.getElementById("toggle").textContent = "▐▐";
+      }
+      
+      function updateSlider(index) {
+        document.getElementById(`item-${index + 1}`).checked = true;
+      }
+      
+      document.getElementById("prev").addEventListener("click", () => {
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        changeSong(currentSongIndex);
+      });
+      
+      document.getElementById("next").addEventListener("click", () => {
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        changeSong(currentSongIndex);
+      });
+      
+      document.getElementById("toggle").addEventListener("click", () => {
+        if (isPlaying) {
+          audio.pause();
+          isPlaying = false;
+          document.getElementById("toggle").textContent = "▶";
+        } else {
+          audio.play().catch(error => console.log("Playback error: ", error));
+          isPlaying = true;
+          document.getElementById("toggle").textContent = "▐▐";
+        }
+      });
+    </script>
+  </body>
+</html>
